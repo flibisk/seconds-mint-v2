@@ -1,16 +1,11 @@
 "use client";
 
-import { createThirdwebClient, getContract } from "thirdweb";
+import { getContract } from "thirdweb";
 import { ethereum, base, polygon, baseSepolia, polygonAmoy } from "thirdweb/chains";
 import { claimTo } from "thirdweb/extensions/erc721";
 import { ConnectButton, useActiveAccount, TransactionButton } from "thirdweb/react";
+import { client } from "@/lib/thirdwebClient";
 
-// Client (uses your NEXT_PUBLIC_THIRDWEB_CLIENT_ID)
-const client = createThirdwebClient({
-  clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!,
-});
-
-// Map env string -> chain object
 const CHAIN_NAME = (process.env.NEXT_PUBLIC_CHAIN || "").toLowerCase();
 const chain =
   CHAIN_NAME === "ethereum" ? ethereum :
@@ -18,7 +13,7 @@ const chain =
   CHAIN_NAME === "polygon" ? polygon :
   CHAIN_NAME === "base-sepolia" ? baseSepolia :
   CHAIN_NAME === "polygon-amoy" ? polygonAmoy :
-  ethereum; // default fallback
+  ethereum; // fallback
 
 // Your ERC721 Drop (NFT Drop) contract
 const contract = getContract({
@@ -36,7 +31,8 @@ export default function Page() {
       <p style={{ opacity: 0.7, marginBottom: 24 }}>Connect your wallet to mint your NFT.</p>
 
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <ConnectButton client={client} />
+        {/* ConnectButton will read client from Provider context automatically */}
+        <ConnectButton />
       </div>
 
       {account && (
@@ -46,7 +42,7 @@ export default function Page() {
               claimTo({
                 contract,
                 to: account.address,
-                quantity: 1n, // mint 1
+                quantity: BigInt(1), // ✅ avoid ES2020 literal
               })
             }
             onError={(err) => {
