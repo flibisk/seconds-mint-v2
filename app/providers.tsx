@@ -2,7 +2,9 @@
 
 import { ThirdwebProvider } from "thirdweb/react";
 import { ethereum, base, polygon, baseSepolia, polygonAmoy } from "thirdweb/chains";
-import { client } from "@/lib/thirdwebClient";
+import { client } from "./thirdwebClient";
+
+
 
 const CHAIN_NAME = (process.env.NEXT_PUBLIC_CHAIN || "").toLowerCase();
 const activeChain =

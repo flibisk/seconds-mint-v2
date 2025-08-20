@@ -4,7 +4,7 @@ import { getContract } from "thirdweb";
 import { ethereum, base, polygon, baseSepolia, polygonAmoy } from "thirdweb/chains";
 import { claimTo } from "thirdweb/extensions/erc721";
 import { ConnectButton, useActiveAccount, TransactionButton } from "thirdweb/react";
-import { client } from "@/lib/thirdwebClient";
+import { client } from "./thirdwebClient";
 
 const CHAIN_NAME = (process.env.NEXT_PUBLIC_CHAIN || "").toLowerCase();
 const chain =
