@@ -26,7 +26,7 @@ export default function Page() {
   const account = useActiveAccount();
   const [qtyStr, setQtyStr] = useState<string>("1");
 
-  // sanitize to a positive integer, default 1
+  // sanitize: allow only positive integers, default to 1
   const qtyNum = useMemo(() => {
     const n = Number(qtyStr);
     return Number.isFinite(n) && n >= 1 && Number.isInteger(n) ? n : 1;
@@ -62,7 +62,7 @@ export default function Page() {
               step={1}
               value={qtyStr}
               onChange={(e) => setQtyStr(e.target.value.replace(/[^\d]/g, ""))}
-              style={{ width: 110, textAlign: "center", padding: "8px 6px", fontSize: 16 }}
+              style={{ width: 100, textAlign: "center", padding: "8px 6px", fontSize: 16 }}
               aria-label="Quantity"
             />
 
@@ -80,7 +80,7 @@ export default function Page() {
               claimTo({
                 contract,
                 to: account.address,
-                quantity: qtyBigInt, // mint N at once (no UI cap)
+                quantity: qtyBigInt, // no cap — contract limits apply
               })
             }
             onError={(err) => {
@@ -95,8 +95,8 @@ export default function Page() {
             Mint {qtyNum}
           </TransactionButton>
 
-          <p style={{ fontSize: 12, opacity: 0.6, marginTop: 12 }}>
-            No UI limit. Transactions can still fail if they exceed contract rules, supply, or gas constraints.
+          <p style={{ fontSize: 12, opacity: 0.7, marginTop: 12 }}>
+            No UI limit. Your transaction will still fail if it exceeds contract settings, supply, or gas constraints.
           </p>
         </>
       )}
