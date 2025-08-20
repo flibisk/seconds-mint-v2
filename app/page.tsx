@@ -32,7 +32,7 @@ export default function Page() {
 
       <div style={{ display: "flex", justifyContent: "center" }}>
         {/* ConnectButton will read client from Provider context automatically */}
-        <ConnectButton />
+        <ConnectButton client={client} />
       </div>
 
       {account && (
