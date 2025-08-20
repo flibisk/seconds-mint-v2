@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { getContract } from "thirdweb";
 import { ethereum, base, polygon, baseSepolia, polygonAmoy } from "thirdweb/chains";
-import { claimTo } from "thirdweb/extensions/erc721";
+import { claimTo, getActiveClaimCondition } from "thirdweb/extensions/erc721";
+import { getCurrencyMetadata } from "thirdweb/extensions/erc20";
 import { ConnectButton, useActiveAccount, TransactionButton } from "thirdweb/react";
 import { client } from "./thirdwebClient";
 
@@ -16,23 +17,79 @@ const chain =
   CHAIN_NAME === "polygon-amoy" ? polygonAmoy :
   ethereum;
 
-// Optional soft cap to keep UI friendly (contract will still enforce its own limits)
-const UI_MAX_PER_TX = Number(process.env.NEXT_PUBLIC_UI_MAX_PER_TX || 5);
-
 const contract = getContract({
   client,
   chain,
   address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS!,
 });
 
+// tiny helper (ethers-like) to format bigints
+function formatUnits(bi: bigint, decimals = 18): string {
+  const s = bi.toString().padStart(decimals + 1, "0");
+  const whole = s.slice(0, -decimals);
+  const frac = s.slice(-decimals).replace(/0+$/, "");
+  return frac ? `${whole}.${frac}` : whole;
+}
+
 export default function Page() {
   const account = useActiveAccount();
-  const [qty, setQty] = useState<number>(1);
+  const [qtyStr, setQtyStr] = useState<string>("1");
 
-  const canDecrement = qty > 1;
-  const canIncrement = qty < UI_MAX_PER_TX;
+  // pricing state
+  const [unitPriceWei, setUnitPriceWei] = useState<bigint | null>(null);
+  const [currencySymbol, setCurrencySymbol] = useState<string>("ETH");
+  const [currencyDecimals, setCurrencyDecimals] = useState<number>(18);
 
-  const qtyBigInt = useMemo(() => BigInt(qty), [qty]);
+  // read active claim condition price on mount
+  useEffect(() => {
+    (async () => {
+      try {
+        const cc = await getActiveClaimCondition({ contract });
+        // cc.price is BigInt, cc.currencyAddress is 0x… (native or ERC20)
+        const price = cc?.price ?? 0n;
+        setUnitPriceWei(price);
+
+        const currency = cc?.currencyAddress?.toLowerCase?.() ?? "0x0000000000000000000000000000000000000000";
+        const isNative =
+          currency === "0x0000000000000000000000000000000000000000" ||
+          currency === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+
+        if (isNative) {
+          // native coin on chain (ETH/BaseETH/MATIC -> show chain-appropriate symbol if you prefer)
+          setCurrencySymbol(CHAIN_NAME === "polygon" || CHAIN_NAME === "polygon-amoy" ? "MATIC" : "ETH");
+          setCurrencyDecimals(18);
+        } else {
+          const md = await getCurrencyMetadata({
+            client,
+            chain,
+            address: currency,
+          });
+          setCurrencySymbol(md.symbol || "TOKEN");
+          setCurrencyDecimals(md.decimals ?? 18);
+        }
+      } catch (e) {
+        console.error("Failed to read claim condition:", e);
+        // keep defaults; UI will just omit price if unreadable
+        setUnitPriceWei(null);
+      }
+    })();
+  }, []);
+
+  // sanitize qty (positive int)
+  const qtyNum = useMemo(() => {
+    const n = Number(qtyStr);
+    return Number.isFinite(n) && n >= 1 && Number.isInteger(n) ? n : 1;
+  }, [qtyStr]);
+
+  const qtyBigInt = useMemo(() => BigInt(qtyNum), [qtyNum]);
+
+  // totals
+  const unitPriceDisplay =
+    unitPriceWei !== null ? `${formatUnits(unitPriceWei, currencyDecimals)} ${currencySymbol}` : "—";
+  const totalDisplay =
+    unitPriceWei !== null
+      ? `${formatUnits(unitPriceWei * BigInt(qtyNum), currencyDecimals)} ${currencySymbol}`
+      : "—";
 
   return (
     <main style={{ maxWidth: 720, margin: "0 auto", padding: "40px 16px", textAlign: "center" }}>
@@ -45,32 +102,29 @@ export default function Page() {
 
       {account && (
         <>
-          {/* Quantity selector */}
-          <div style={{ display: "flex", justifyContent: "center", gap: 8, alignItems: "center", marginBottom: 20 }}>
+          {/* Quantity selector (no upper cap) */}
+          <div style={{ display: "flex", justifyContent: "center", gap: 8, alignItems: "center", marginBottom: 12 }}>
             <button
-              onClick={() => setQty((q) => Math.max(1, q - 1))}
-              disabled={!canDecrement}
+              onClick={() => setQtyStr(String(Math.max(1, qtyNum - 1)))}
               style={{ padding: "8px 12px", fontSize: 16 }}
               aria-label="Decrease quantity"
             >
               −
             </button>
+
             <input
               type="number"
               inputMode="numeric"
               min={1}
-              max={UI_MAX_PER_TX}
-              value={qty}
-              onChange={(e) => {
-                const v = Number(e.target.value);
-                if (!Number.isNaN(v)) setQty(Math.min(Math.max(1, v), UI_MAX_PER_TX));
-              }}
-              style={{ width: 80, textAlign: "center", padding: "8px 6px", fontSize: 16 }}
+              step={1}
+              value={qtyStr}
+              onChange={(e) => setQtyStr(e.target.value.replace(/[^\d]/g, ""))}
+              style={{ width: 110, textAlign: "center", padding: "8px 6px", fontSize: 16 }}
               aria-label="Quantity"
             />
+
             <button
-              onClick={() => setQty((q) => Math.min(UI_MAX_PER_TX, q + 1))}
-              disabled={!canIncrement}
+              onClick={() => setQtyStr(String(qtyNum + 1))}
               style={{ padding: "8px 12px", fontSize: 16 }}
               aria-label="Increase quantity"
             >
@@ -78,12 +132,18 @@ export default function Page() {
             </button>
           </div>
 
+          {/* Cost line */}
+          <div style={{ marginBottom: 20, fontSize: 14, opacity: 0.8 }}>
+            <div>Price per NFT: <strong>{unitPriceDisplay}</strong></div>
+            <div>Total: <strong>{totalDisplay}</strong></div>
+          </div>
+
           <TransactionButton
             transaction={() =>
               claimTo({
                 contract,
                 to: account.address,
-                quantity: qtyBigInt, // 👈 mint N at once
+                quantity: qtyBigInt, // mint N at once
               })
             }
             onError={(err) => {
@@ -92,14 +152,14 @@ export default function Page() {
             }}
             onTransactionConfirmed={(tx) => {
               console.log("Minted!", tx.transactionHash);
-              alert(`Minted ${qty} NFT${qty > 1 ? "s" : ""}!`);
+              alert(`Minted ${qtyNum} NFT${qtyNum > 1 ? "s" : ""}!`);
             }}
           >
-            Mint {qty}
+            Mint {qtyNum}
           </TransactionButton>
 
-          <p style={{ fontSize: 12, opacity: 0.7, marginTop: 12 }}>
-            Max per transaction (UI): {UI_MAX_PER_TX}. Contract limits still apply.
+          <p style={{ fontSize: 12, opacity: 0.6, marginTop: 12 }}>
+            No UI limit. Transactions can still fail if they exceed contract rules, supply, or gas constraints.
           </p>
         </>
       )}
