@@ -4,7 +4,8 @@ import { getContract } from "thirdweb";
 import { ethereum, base, polygon, baseSepolia, polygonAmoy } from "thirdweb/chains";
 import { claimTo } from "thirdweb/extensions/erc721";
 import { ConnectButton, useActiveAccount, TransactionButton } from "thirdweb/react";
-import { client } from "./thirdwebClient";
+import { client } from "./thirdwebClient";       // your shared client
+
 
 const CHAIN_NAME = (process.env.NEXT_PUBLIC_CHAIN || "").toLowerCase();
 const chain =
@@ -30,7 +31,7 @@ export default function Page() {
       <p style={{ opacity: 0.7, marginBottom: 24 }}>Connect your wallet to mint your NFT.</p>
 
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <ConnectButton client={client} /> {/* 👈 keep client prop here */}
+        <ConnectButton client={client} chain={chain} />  
       </div>
 
       {account && (
