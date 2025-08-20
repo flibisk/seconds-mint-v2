@@ -2,9 +2,6 @@
 
 import { ThirdwebProvider } from "thirdweb/react";
 import { ethereum, base, polygon, baseSepolia, polygonAmoy } from "thirdweb/chains";
-import { client } from "./thirdwebClient";
-
-
 
 const CHAIN_NAME = (process.env.NEXT_PUBLIC_CHAIN || "").toLowerCase();
 const activeChain =
@@ -17,7 +14,10 @@ const activeChain =
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThirdwebProvider client={client} activeChain={activeChain}>
+    <ThirdwebProvider
+      clientId={process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!}  // 👈 use clientId here
+      activeChain={activeChain}
+    >
       {children}
     </ThirdwebProvider>
   );

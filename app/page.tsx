@@ -13,9 +13,8 @@ const chain =
   CHAIN_NAME === "polygon" ? polygon :
   CHAIN_NAME === "base-sepolia" ? baseSepolia :
   CHAIN_NAME === "polygon-amoy" ? polygonAmoy :
-  ethereum; // fallback
+  ethereum;
 
-// Your ERC721 Drop (NFT Drop) contract
 const contract = getContract({
   client,
   chain,
@@ -31,8 +30,7 @@ export default function Page() {
       <p style={{ opacity: 0.7, marginBottom: 24 }}>Connect your wallet to mint your NFT.</p>
 
       <div style={{ display: "flex", justifyContent: "center" }}>
-        {/* ConnectButton will read client from Provider context automatically */}
-        <ConnectButton client={client} />
+        <ConnectButton client={client} /> {/* 👈 keep client prop here */}
       </div>
 
       {account && (
@@ -42,7 +40,7 @@ export default function Page() {
               claimTo({
                 contract,
                 to: account.address,
-                quantity: BigInt(1), // ✅ avoid ES2020 literal
+                quantity: BigInt(1), // 👈 no ES2020 literal
               })
             }
             onError={(err) => {
