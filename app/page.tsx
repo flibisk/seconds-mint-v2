@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { getContract } from "thirdweb";
 import { ethereum, base, polygon, baseSepolia, polygonAmoy } from "thirdweb/chains";
-import { claimTo, getActiveClaimCondition } from "thirdweb/extensions/erc721";
-import { getCurrencyMetadata } from "thirdweb/extensions/erc20";
+import { claimTo } from "thirdweb/extensions/erc721";
 import { ConnectButton, useActiveAccount, TransactionButton } from "thirdweb/react";
 import { client } from "./thirdwebClient";
 
@@ -23,73 +22,17 @@ const contract = getContract({
   address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS!,
 });
 
-// tiny helper (ethers-like) to format bigints
-function formatUnits(bi: bigint, decimals = 18): string {
-  const s = bi.toString().padStart(decimals + 1, "0");
-  const whole = s.slice(0, -decimals);
-  const frac = s.slice(-decimals).replace(/0+$/, "");
-  return frac ? `${whole}.${frac}` : whole;
-}
-
 export default function Page() {
   const account = useActiveAccount();
   const [qtyStr, setQtyStr] = useState<string>("1");
 
-  // pricing state
-  const [unitPriceWei, setUnitPriceWei] = useState<bigint | null>(null);
-  const [currencySymbol, setCurrencySymbol] = useState<string>("ETH");
-  const [currencyDecimals, setCurrencyDecimals] = useState<number>(18);
-
-  // read active claim condition price on mount
-  useEffect(() => {
-    (async () => {
-      try {
-        const cc = await getActiveClaimCondition({ contract });
-        // cc.price is BigInt, cc.currencyAddress is 0x… (native or ERC20)
-        const price = cc?.price ?? 0n;
-        setUnitPriceWei(price);
-
-        const currency = cc?.currencyAddress?.toLowerCase?.() ?? "0x0000000000000000000000000000000000000000";
-        const isNative =
-          currency === "0x0000000000000000000000000000000000000000" ||
-          currency === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-
-        if (isNative) {
-          // native coin on chain (ETH/BaseETH/MATIC -> show chain-appropriate symbol if you prefer)
-          setCurrencySymbol(CHAIN_NAME === "polygon" || CHAIN_NAME === "polygon-amoy" ? "MATIC" : "ETH");
-          setCurrencyDecimals(18);
-        } else {
-          const md = await getCurrencyMetadata({
-            client,
-            chain,
-            address: currency,
-          });
-          setCurrencySymbol(md.symbol || "TOKEN");
-          setCurrencyDecimals(md.decimals ?? 18);
-        }
-      } catch (e) {
-        console.error("Failed to read claim condition:", e);
-        // keep defaults; UI will just omit price if unreadable
-        setUnitPriceWei(null);
-      }
-    })();
-  }, []);
-
-  // sanitize qty (positive int)
+  // sanitize to a positive integer, default 1
   const qtyNum = useMemo(() => {
     const n = Number(qtyStr);
     return Number.isFinite(n) && n >= 1 && Number.isInteger(n) ? n : 1;
   }, [qtyStr]);
 
   const qtyBigInt = useMemo(() => BigInt(qtyNum), [qtyNum]);
-
-  // totals
-  const unitPriceDisplay =
-    unitPriceWei !== null ? `${formatUnits(unitPriceWei, currencyDecimals)} ${currencySymbol}` : "—";
-  const totalDisplay =
-    unitPriceWei !== null
-      ? `${formatUnits(unitPriceWei * BigInt(qtyNum), currencyDecimals)} ${currencySymbol}`
-      : "—";
 
   return (
     <main style={{ maxWidth: 720, margin: "0 auto", padding: "40px 16px", textAlign: "center" }}>
@@ -102,8 +45,8 @@ export default function Page() {
 
       {account && (
         <>
-          {/* Quantity selector (no upper cap) */}
-          <div style={{ display: "flex", justifyContent: "center", gap: 8, alignItems: "center", marginBottom: 12 }}>
+          {/* Quantity selector with no upper cap */}
+          <div style={{ display: "flex", justifyContent: "center", gap: 8, alignItems: "center", marginBottom: 20 }}>
             <button
               onClick={() => setQtyStr(String(Math.max(1, qtyNum - 1)))}
               style={{ padding: "8px 12px", fontSize: 16 }}
@@ -132,18 +75,12 @@ export default function Page() {
             </button>
           </div>
 
-          {/* Cost line */}
-          <div style={{ marginBottom: 20, fontSize: 14, opacity: 0.8 }}>
-            <div>Price per NFT: <strong>{unitPriceDisplay}</strong></div>
-            <div>Total: <strong>{totalDisplay}</strong></div>
-          </div>
-
           <TransactionButton
             transaction={() =>
               claimTo({
                 contract,
                 to: account.address,
-                quantity: qtyBigInt, // mint N at once
+                quantity: qtyBigInt, // mint N at once (no UI cap)
               })
             }
             onError={(err) => {
