@@ -34,6 +34,7 @@ const contract = getContract({
 });
 
 export default function Page() {
+  // Mobile responsive version
   const account = useActiveAccount();
   const [qtyStr, setQtyStr] = useState<string>("1");
 
