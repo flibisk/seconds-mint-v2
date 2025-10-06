@@ -56,55 +56,106 @@ export default function Page() {
           --muted: rgba(255,255,255,0.72);
           --accent: #d9ff5b; /* tweak to your exact Seconds accent */
         }
-        /* make sure the root can span full width/height */
-html, body, #__next { margin: 0; width: 100%; height: 100%; }
-
-  
+        
+        /* Reset and ensure proper mobile viewport */
+        html, body, #__next { 
+          margin: 0; 
+          padding: 0;
+          width: 100%; 
+          height: 100%; 
+          overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        
+        /* Mobile-first responsive container */
         .screen {
-  position: relative;
-  min-height: 100dvh;   /* full viewport height */
-  width: 100vw;         /* full width */
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  padding: 24px;
-}
+          position: relative;
+          min-height: 100dvh;
+          width: 100%;
+          max-width: 100vw; /* Prevent overflow */
+          display: grid;
+          place-items: center;
+          padding: 16px; /* Reduced padding on mobile */
+          box-sizing: border-box;
+        }
+        
+        /* Responsive padding for larger screens */
+        @media (min-width: 768px) {
+          .screen {
+            padding: 24px;
+          }
+        }
   
-        /* 🔁 change from absolute → fixed so it ignores any parent width limits */
-.bg {
-  position: fixed;      /* was: absolute */
-  inset: 0;
-  z-index: 0;
-}
+        /* Background container - use absolute instead of fixed for better mobile behavior */
+        .bg {
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          width: 100%;
+          height: 100%;
+        }
+        
         .bgMedia {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-}
+          position: absolute; 
+          inset: 0;
+          width: 100%; 
+          height: 100%;
+          object-fit: cover;
+        }
+        
         .scrim {
-          position: absolute; inset: 0;
+          position: absolute; 
+          inset: 0;
           background:
             radial-gradient(1200px 600px at 60% -10%, rgba(217,255,91,0.12), transparent 60%),
             linear-gradient(180deg, rgba(11,11,11,0.65), rgba(18,18,18,0.85));
           backdrop-filter: blur(2px);
         }
   
+        /* Responsive content box */
         .box {
           position: relative;
-          z-index: 1;                       /* above background */
+          z-index: 1;
           width: 100%;
           max-width: 720px;
           border-radius: 18px;
-          padding: 28px 22px;
+          padding: 20px 16px; /* Reduced padding on mobile */
           background: rgba(12,12,12,0.6);
           border: 1px solid rgba(255,255,255,0.12);
           backdrop-filter: blur(10px);
           text-align: center;
+          box-sizing: border-box;
+          margin: 0 auto;
         }
-        .title { font-weight: 800; font-size: clamp(32px,4vw,48px); margin: 0 0 6px; letter-spacing: 0.02em; }
-        .sub { margin: 0 0 18px; color: var(--muted); }
+        
+        /* Responsive padding for larger screens */
+        @media (min-width: 768px) {
+          .box {
+            padding: 28px 22px;
+          }
+        }
+        
+        .title { 
+          font-weight: 800; 
+          font-size: clamp(28px, 5vw, 48px); /* Better mobile scaling */
+          margin: 0 0 6px; 
+          letter-spacing: 0.02em; 
+          line-height: 1.2;
+        }
+        
+        .sub { 
+          margin: 0 0 18px; 
+          color: var(--muted); 
+          font-size: clamp(14px, 3vw, 16px);
+          line-height: 1.5;
+        }
   
-        .row { display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .row { 
+          display: flex; 
+          justify-content: center; 
+          align-items: center; 
+          gap: 8px; 
+          flex-wrap: wrap; /* Allow wrapping on very small screens */
+        }
   
         .btn {
           padding: 10px 14px;
@@ -114,39 +165,81 @@ html, body, #__next { margin: 0; width: 100%; height: 100%; }
           color: var(--fg);
           font-weight: 600;
           transition: transform .06s ease, background .2s ease, border-color .2s ease;
+          min-width: 44px; /* Touch target size */
+          min-height: 44px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
-        .btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.24); }
-        .btn:active { transform: translateY(1px); }
+        
+        .btn:hover { 
+          background: rgba(255,255,255,0.1); 
+          border-color: rgba(255,255,255,0.24); 
+        }
+        
+        .btn:active { 
+          transform: translateY(1px); 
+        }
   
         .qtyInput {
-          width: 110px;
+          width: 80px; /* Reduced width for mobile */
           text-align: center;
           padding: 10px 8px;
-          font-size: 16px;
+          font-size: 16px; /* Prevent zoom on iOS */
           border-radius: 12px;
           background: rgba(255,255,255,0.06);
           color: var(--fg);
           border: 1px solid rgba(255,255,255,0.14);
           outline: none;
+          min-height: 44px; /* Touch target size */
+          box-sizing: border-box;
+        }
+        
+        /* Larger input on bigger screens */
+        @media (min-width: 768px) {
+          .qtyInput {
+            width: 110px;
+          }
         }
   
         .mintButton {
-        margin-top: 16px;
-        width: 100%;
-        height: 48px;
-        border-radius: 14px;
-        font-weight: 700;
-        letter-spacing: 0.02em;
-        background: #ffffff;
-        color: #0b0b0b;
-        border: 1px solid #e6e6e6;
-}
+          margin-top: 16px;
+          width: 100%;
+          height: 48px;
+          border-radius: 14px;
+          font-weight: 700;
+          letter-spacing: 0.02em;
+          background: #ffffff;
+          color: #0b0b0b;
+          border: 1px solid #e6e6e6;
+          box-sizing: border-box;
+        }
 
-        .mintButton:hover { background: #f2f2f2; }
-        .mintButton:active { transform: translateY(1px); }
-        .mintButton:disabled { opacity: 0.6; cursor: not-allowed; }
+        .mintButton:hover { 
+          background: #f2f2f2; 
+        }
+        
+        .mintButton:active { 
+          transform: translateY(1px); 
+        }
+        
+        .mintButton:disabled { 
+          opacity: 0.6; 
+          cursor: not-allowed; 
+        }
   
-        .note { font-size: 12px; opacity: 0.65; margin-top: 12px; }
+        .note { 
+          font-size: 12px; 
+          opacity: 0.65; 
+          margin-top: 12px; 
+          line-height: 1.4;
+        }
+        
+        /* Ensure Thirdweb components don't overflow */
+        .box > * {
+          max-width: 100%;
+          box-sizing: border-box;
+        }
       `}</style>
   
       <div className="screen">

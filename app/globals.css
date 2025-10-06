@@ -15,17 +15,18 @@ html, body {
   color: var(--seconds-text);
   min-height: 100%;
   margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
-/* Center the page content vertically + horizontally */
+/* Base body styles - let the component handle layout */
 body {
-  display: grid;
-  place-items: center;
-  min-height: 100svh; /* better on mobile */
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: 0.01em;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Tighter, stronger headline */
@@ -55,9 +56,4 @@ button {
 button:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
 button:active { transform: translateY(1px); }
 
-/* Give the main content a max width so it doesn’t feel lost on big screens */
-main, #__next > div, body > div {
-  max-width: 680px;
-  width: 100%;
-  padding: 24px;
-}
+/* Remove conflicting layout styles - let components handle their own layout */
