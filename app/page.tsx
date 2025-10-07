@@ -218,6 +218,10 @@ export default function HomePage() {
           box-sizing: border-box;
         }
         
+        html {
+          scroll-behavior: smooth;
+        }
+        
         html, body {
           margin: 0;
           padding: 0;
@@ -228,6 +232,13 @@ export default function HomePage() {
           font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Respect user's motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+          html {
+            scroll-behavior: auto;
+          }
         }
         
         .header {
@@ -405,6 +416,7 @@ export default function HomePage() {
           padding: 100px 20px;
           max-width: 1200px;
           margin: 0 auto;
+          scroll-margin-top: 80px; /* Offset for fixed header */
         }
         
         .section-title {
