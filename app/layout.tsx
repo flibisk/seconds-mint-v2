@@ -13,8 +13,29 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Seconds Film — Own a part of the next wave of cinema",
-  description: "Buy a second. Earn royalties. Mint Seconds NFTs from independent films and earn royalties when the film sells.",
+  title: "Seconds: Own seconds, earn royalties",
+  description: "Seconds allows you to buy a second of a film and get paid royalties based on the films profits.",
+  metadataBase: new URL('https://secondsfilm.com'),
+  openGraph: {
+    title: "Seconds: Own seconds, earn royalties",
+    description: "Seconds allows you to buy a second of a film and get paid royalties based on the films profits.",
+    images: [
+      {
+        url: '/Meta-image.avif',
+        width: 1200,
+        height: 630,
+        alt: 'Seconds - Own seconds, earn royalties',
+      }
+    ],
+    type: 'website',
+    siteName: 'Seconds',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Seconds: Own seconds, earn royalties",
+    description: "Seconds allows you to buy a second of a film and get paid royalties based on the films profits.",
+    images: ['/Meta-image.avif'],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
