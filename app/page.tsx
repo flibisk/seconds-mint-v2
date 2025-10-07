@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import NewsletterSignup from "./components/NewsletterSignup";
 
 function FAQItem({ question, answer, index }: { question: string; answer: string | React.ReactNode; index: number }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -956,6 +957,17 @@ export default function HomePage() {
       >
         <h2 className="section-title">Frequently Asked Questions</h2>
         <FAQTabs />
+      </motion.section>
+
+      {/* Newsletter Section */}
+      <motion.section 
+        className="section"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8 }}
+      >
+        <NewsletterSignup />
       </motion.section>
 
       {/* Footer */}
