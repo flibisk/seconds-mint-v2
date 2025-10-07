@@ -43,6 +43,7 @@ export const metadata: Metadata = {
     description: "Seconds allows you to buy a second of a film and get paid royalties based on the films profits.",
     images: ['https://mint.secondsfilm.com/Meta-image.png'],
     creator: '@secondsfilm',
+    site: '@secondsfilm',
   },
 };
 

@@ -655,8 +655,32 @@ export default function HomePage() {
           margin-top: 100px;
         }
         
-        .footer-links {
+        .footer-social {
           margin: 0 0 20px;
+          display: flex;
+          justify-content: center;
+          gap: 16px;
+        }
+        
+        .footer-social a {
+          color: var(--fg);
+          text-decoration: none;
+          padding: 10px 20px;
+          border: 1px solid rgba(255,255,255,0.2);
+          border-radius: 8px;
+          transition: all 0.2s ease;
+          font-size: 14px;
+          font-weight: 500;
+        }
+        
+        .footer-social a:hover {
+          border-color: var(--accent);
+          color: var(--accent);
+          transform: translateY(-2px);
+        }
+        
+        .footer-links {
+          margin: 20px 0;
         }
         
         .footer-links a {
@@ -972,6 +996,11 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="footer">
+        <div className="footer-social">
+          <a href="https://x.com/secondsfilm" target="_blank" rel="noopener noreferrer">
+            Follow on X/Twitter
+          </a>
+        </div>
         <div className="footer-links">
           <Link href="/terms">Terms and Conditions</Link>
         </div>
