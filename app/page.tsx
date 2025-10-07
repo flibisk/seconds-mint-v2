@@ -1,8 +1,40 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+
+function FAQItem({ question, answer, index }: { question: string; answer: string | React.ReactNode; index: number }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <motion.div
+      className="faq-item"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+    >
+      <div className="faq-question" onClick={() => setIsOpen(!isOpen)}>
+        <span>{question}</span>
+        <span className={`faq-toggle ${isOpen ? 'open' : ''}`}>+</span>
+      </div>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="faq-answer"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {typeof answer === 'string' ? <p>{answer}</p> : answer}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
 
 export default function HomePage() {
   return (
@@ -265,6 +297,64 @@ export default function HomePage() {
         .film-card .coming-soon {
           background: rgba(255,255,255,0.2);
           color: var(--fg);
+        }
+        
+        .faq-container {
+          max-width: 900px;
+          margin: 0 auto;
+        }
+        
+        .faq-item {
+          background: rgba(255,255,255,0.05);
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 16px;
+          margin-bottom: 20px;
+          overflow: hidden;
+          transition: all 0.3s ease;
+        }
+        
+        .faq-item:hover {
+          border-color: rgba(217, 255, 91, 0.3);
+        }
+        
+        .faq-question {
+          padding: 24px 30px;
+          cursor: pointer;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-weight: 600;
+          font-size: 18px;
+          user-select: none;
+          transition: background 0.2s ease;
+        }
+        
+        .faq-question:hover {
+          background: rgba(255,255,255,0.03);
+        }
+        
+        .faq-toggle {
+          font-size: 24px;
+          transition: transform 0.3s ease;
+          color: var(--accent);
+        }
+        
+        .faq-toggle.open {
+          transform: rotate(45deg);
+        }
+        
+        .faq-answer {
+          padding: 0 30px 24px;
+          color: var(--muted);
+          line-height: 1.7;
+        }
+        
+        .faq-answer p {
+          margin: 0 0 12px;
+        }
+        
+        .faq-answer p:last-child {
+          margin-bottom: 0;
         }
         
         .footer {
@@ -546,6 +636,107 @@ export default function HomePage() {
               <span className="status coming-soon">Coming Soon</span>
             </div>
           </motion.div>
+        </div>
+      </motion.section>
+
+      {/* FAQ Section */}
+      <motion.section 
+        className="section"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8 }}
+      >
+        <h2 className="section-title">Frequently Asked Questions</h2>
+        
+        <div className="faq-container">
+          <FAQItem
+            index={0}
+            question="What is a Seconds NFT?"
+            answer="It is what it is. Every NFT represents a second from the film produced. If you own 60 of our Seconds NFTs you own a minute. Seconds NFTs are a creative way of raising money to produce films. Every project will be different and come with unique artwork, traits, attributes and utility."
+          />
+          
+          <FAQItem
+            index={1}
+            question="What is the benefit of owning the NFT?"
+            answer={
+              <div>
+                <p>Imagine owning a part of Reservoir Dogs before it was released. Let's take it one step further. Imagine owning rights to a character in Star Wars before it was big...</p>
+                <p>When you purchase a Second NFT, you gain ongoing royalty payments when the film generates revenue from streaming, box office, or distributions. Each NFT also comes with unique perks like behind-the-scenes access, premiere tickets, cast/crew events, and more.</p>
+              </div>
+            }
+          />
+          
+          <FAQItem
+            index={2}
+            question="Surely you can't make a good film with that level of budget?"
+            answer={
+              <div>
+                <p>We can and we do.</p>
+                <p>We make films produced on a budget, but not a budget that means we can't make good films. This model not only allows us to give directors creative freedom but also allows us to reach a profit quickly - putting that profit to work on the next film.</p>
+                <p>Think Blumhouse and you can't go far wrong. They started in 2008 with Paranormal Activity - which was shot and produced for $15,000 but grossed over $193 million worldwide.</p>
+              </div>
+            }
+          />
+          
+          <FAQItem
+            index={3}
+            question="How can making movies do good?"
+            answer={
+              <div>
+                <p>Seconds has partnered with Screen Northants for all its production - who in 2016 pitched an idea to BBC Children in Need.</p>
+                <p>The idea was that we could use the film making process to raise aspirations in young people, with a particular focus on those who are severely disadvantaged and/or underrepresented in our industry.</p>
+                <p>BBC Children in Need provided the proof-of-concept funding and we have produced 3 feature films in our model and worked with 210 young people who fit the Children in Need criteria. The results were fantastic.</p>
+              </div>
+            }
+          />
+          
+          <FAQItem
+            index={4}
+            question="What is The Academy?"
+            answer={
+              <div>
+                <p>70 disadvantaged young people will get unprecedented training and work experience in Film and TV.</p>
+                <p>The Academy is a 7 year programme which provides educational pathways and industry experience for 14-21 year olds. We identify young people through engagement with schools. From 14-16 we provide work experience on 2 films. We then guide them to an appropriate Further Education course and from 16-18 they gain experience on 2 more films.</p>
+                <p>By this point we hope they will have a clear idea of which department they want to work in and we then guide them to an appropriate Higher Education course. Throughout the HE course, they will gain additional experience on 3 more films, but now focused specifically on the department they want to work in. At 21 they leave University with a degree, 7 feature films on their CV and decent network of professionals.</p>
+              </div>
+            }
+          />
+          
+          <FAQItem
+            index={5}
+            question="Why NFT?"
+            answer={
+              <div>
+                <p>We love the idea of web3 and how it combines the advanced, contemporary functionality of Web2 with the decentralised, community-governed ethos of Web1.</p>
+                <p>Web3 is the internet owned by the builders and users built on a massive computer that is owned by no one. That's just cool.</p>
+              </div>
+            }
+          />
+          
+          <FAQItem
+            index={6}
+            question="How many Films will there be?"
+            answer="We don't plan on stopping anytime soon. We're building a sustainable model for independent cinema that can continue producing quality films for years to come."
+          />
+          
+          <FAQItem
+            index={7}
+            question="When will the project launch?"
+            answer="Now! We have our mint live now! Gone are the days of minting out in 1 minute. Any traditional funders we approach for our films will also be buying seconds."
+          />
+          
+          <FAQItem
+            index={8}
+            question="Who are the founders?"
+            answer={
+              <div>
+                <p>The founders of Seconds have been in the creative and movie making business for decades.</p>
+                <p>Paul Mills is the owner of Screen Northants with several films already under his belt. Screen Northants are the production company that will provide the production model for The Money Shot's movies.</p>
+                <p>Peter Snell has been working in the film and television industry for over 15 years and developing projects in web3 for clients and himself since 2018. He is the creative that will be merging the NFTs with the movie making process and ensuring value for all NFT holders.</p>
+              </div>
+            }
+          />
         </div>
       </motion.section>
 
