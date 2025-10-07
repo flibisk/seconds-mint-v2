@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useActiveAccount } from "thirdweb/react";
@@ -9,8 +9,7 @@ import { createWallet } from "thirdweb/wallets";
 import { client } from "../thirdwebClient";
 import { ethereum, base, polygon, baseSepolia, polygonAmoy } from "thirdweb/chains";
 import { getContract } from "thirdweb";
-import { useReadContract, useOwnedNFTs } from "thirdweb/react";
-import { getNFT } from "thirdweb/extensions/erc721";
+import { getOwnedNFTs } from "thirdweb/extensions/erc721";
 
 // resolve chain from env
 const CHAIN_NAME = (process.env.NEXT_PUBLIC_CHAIN || "").toLowerCase();
@@ -36,11 +35,33 @@ const contract = getContract({
 
 export default function CollectionPage() {
   const account = useActiveAccount();
-  
-  const { data: nfts, isLoading } = useOwnedNFTs({
-    contract,
-    owner: account?.address || "",
-  });
+  const [nfts, setNfts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    async function fetchNFTs() {
+      if (!account?.address) {
+        setNfts([]);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const ownedNFTs = await getOwnedNFTs({
+          contract,
+          owner: account.address,
+        });
+        setNfts(ownedNFTs);
+      } catch (error) {
+        console.error("Error fetching NFTs:", error);
+        setNfts([]);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchNFTs();
+  }, [account?.address]);
 
   return (
     <>
