@@ -375,6 +375,14 @@ export default function HomePage() {
           margin-left: 8px;
         }
         
+        /* Make Connect button more compact */
+        .header-connect button {
+          padding: 8px 16px !important;
+          font-size: 14px !important;
+          height: auto !important;
+          min-height: auto !important;
+        }
+        
         .mobile-menu-button {
           display: none;
           background: none;
