@@ -1,4 +1,4 @@
-# Resend Newsletter Setup Guide
+# Resend Newsletter Setup Guide (Free Tier)
 
 ## 1. Create a Resend Account
 
@@ -13,56 +13,67 @@
 3. Give it a name (e.g., "Seconds Newsletter")
 4. Copy the API key
 
-## 3. Create an Audience
+## 3. Add Environment Variables
 
-1. Go to [Audiences](https://resend.com/audiences) in your Resend dashboard
-2. Click "Create Audience"
-3. Name it "Seconds Newsletter" or similar
-4. Copy the Audience ID (it will look like: `aud_xxxxxxxxxxxxx`)
-
-## 4. Add Environment Variables
-
-Add these to your `.env.local` file (or Vercel environment variables):
+Add these to your Vercel environment variables:
 
 ```env
 RESEND_API_KEY=re_your_actual_api_key_here
-RESEND_AUDIENCE_ID=aud_your_audience_id_here
+NOTIFICATION_EMAIL=your.email@example.com
 ```
 
-## 5. Deploy to Vercel
+## 4. Deploy to Vercel
 
 In your Vercel dashboard:
 1. Go to your project settings
 2. Navigate to "Environment Variables"
 3. Add both variables:
    - `RESEND_API_KEY` (keep this secret!)
-   - `RESEND_AUDIENCE_ID`
+   - `NOTIFICATION_EMAIL` (optional - defaults to my.subs@mac.com)
 
-## 6. Test the Newsletter Signup
+## 5. Test the Newsletter Signup
 
 1. Go to your website
 2. Scroll to the "Stay Updated" section
 3. Enter an email and click Subscribe
-4. Check your Resend dashboard to see the new contact
+4. **You'll receive an email notification** with the subscriber's email address
+
+## How It Works (Free Tier)
+
+Since you're on Resend's free tier without Audiences:
+- When someone subscribes, you receive an **instant email notification** with their email address
+- Emails are stored temporarily (in-memory while the server is running)
+- You can view all subscribers by visiting: `https://your-site.com/api/newsletter`
 
 ## Features
 
 - ✅ Email validation
 - ✅ Duplicate email detection
+- ✅ Instant email notifications to you
 - ✅ Success/error messages
 - ✅ Mobile responsive design
 - ✅ Smooth animations
 - ✅ Disabled state after successful signup
 
-## Sending Campaigns
+## Viewing Subscribers
 
-To send updates to your subscribers:
+Visit `https://mint.secondsfilm.com/api/newsletter` in your browser to see:
+- Total number of subscribers
+- List of all email addresses
 
-1. Go to [Broadcasts](https://resend.com/broadcasts) in Resend
-2. Click "Create Broadcast"
-3. Select your "Seconds Newsletter" audience
-4. Compose your email about new films, updates, etc.
-5. Send or schedule
+**Note:** This is temporary storage. For permanent storage, consider adding a database later.
+
+## Sending Updates to Subscribers
+
+To email your subscribers about new films/mints:
+
+1. Collect emails from the API endpoint or your notification emails
+2. Use Resend dashboard to send emails:
+   - Go to [Emails](https://resend.com/emails)
+   - Click "Send Email"
+   - Add your subscriber emails to BCC
+   - Compose your update
+   - Send!
 
 ## Free Tier Limits
 
