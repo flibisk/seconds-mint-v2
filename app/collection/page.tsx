@@ -45,19 +45,25 @@ export default function CollectionPage() {
         return;
       }
 
-      setIsLoading(true);
-      try {
-        const ownedNFTs = await getOwnedNFTs({
-          contract,
-          owner: account.address,
-        });
-        setNfts(ownedNFTs);
-      } catch (error) {
-        console.error("Error fetching NFTs:", error);
-        setNfts([]);
-      } finally {
-        setIsLoading(false);
-      }
+        setIsLoading(true);
+        try {
+          const ownedNFTs = await getOwnedNFTs({
+            contract,
+            owner: account.address,
+          });
+          console.log("Fetched NFTs:", ownedNFTs); // Debug log
+          console.log("NFT metadata:", ownedNFTs.map(nft => ({
+            id: nft.id.toString(),
+            name: nft.metadata?.name,
+            image: nft.metadata?.image,
+          }))); // Debug log
+          setNfts(ownedNFTs);
+        } catch (error) {
+          console.error("Error fetching NFTs:", error);
+          setNfts([]);
+        } finally {
+          setIsLoading(false);
+        }
     }
 
     fetchNFTs();
@@ -288,32 +294,56 @@ export default function CollectionPage() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
           >
-            {nfts.map((nft, index) => (
-              <motion.div
-                key={nft.id.toString()}
-                className="nft-card"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <div className="nft-image">
-                  {nft.metadata.image ? (
-                    <img 
-                      src={nft.metadata.image} 
-                      alt={nft.metadata.name || `Second #${nft.id}`} 
-                    />
-                  ) : (
-                    <div className="nft-placeholder">🎬</div>
-                  )}
-                </div>
-                <div className="nft-info">
-                  <h3 className="nft-name">
-                    {nft.metadata.name || `Second #${nft.id}`}
-                  </h3>
-                  <p className="nft-id">Token ID: {nft.id.toString()}</p>
-                </div>
-              </motion.div>
-            ))}
+            {nfts.map((nft, index) => {
+              // Handle different image URL formats (IPFS, HTTP, data URIs)
+              const getImageUrl = (url: string | undefined) => {
+                if (!url) return null;
+                // Convert IPFS URLs to HTTP gateway
+                if (url.startsWith('ipfs://')) {
+                  return url.replace('ipfs://', 'https://ipfs.io/ipfs/');
+                }
+                return url;
+              };
+
+              const imageUrl = getImageUrl(nft.metadata?.image);
+
+              return (
+                <motion.div
+                  key={nft.id.toString()}
+                  className="nft-card"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <div className="nft-image">
+                    {imageUrl ? (
+                      <img 
+                        src={imageUrl} 
+                        alt={nft.metadata?.name || `Second #${nft.id}`}
+                        onError={(e) => {
+                          // Fallback if image fails to load
+                          (e.target as HTMLImageElement).style.display = 'none';
+                          (e.target as HTMLImageElement).parentElement!.innerHTML = '<div class="nft-placeholder">🎬</div>';
+                        }}
+                      />
+                    ) : (
+                      <div className="nft-placeholder">🎬</div>
+                    )}
+                  </div>
+                  <div className="nft-info">
+                    <h3 className="nft-name">
+                      {nft.metadata?.name || `Second #${nft.id}`}
+                    </h3>
+                    <p className="nft-id">Token ID: {nft.id.toString()}</p>
+                    {nft.metadata?.description && (
+                      <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>
+                        {nft.metadata.description}
+                      </p>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })}
           </motion.div>
         ) : (
           <div className="empty-state">
