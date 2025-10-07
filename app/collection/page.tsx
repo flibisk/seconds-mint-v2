@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useActiveAccount } from "thirdweb/react";
 import { ConnectButton } from "thirdweb/react";
 import { createWallet } from "thirdweb/wallets";
@@ -10,6 +10,25 @@ import { client } from "../thirdwebClient";
 import { ethereum, base, polygon, baseSepolia, polygonAmoy } from "thirdweb/chains";
 import { getContract } from "thirdweb";
 import { getOwnedNFTs } from "thirdweb/extensions/erc721";
+
+function HamburgerIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  );
+}
 
 // resolve chain from env
 const CHAIN_NAME = (process.env.NEXT_PUBLIC_CHAIN || "").toLowerCase();
@@ -37,6 +56,7 @@ export default function CollectionPage() {
   const account = useActiveAccount();
   const [nfts, setNfts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     async function fetchNFTs() {
@@ -71,6 +91,54 @@ export default function CollectionPage() {
 
   return (
     <>
+      {/* Header */}
+      <header className="header">
+        <div className="header-content">
+          <Link href="/" className="logo">
+            <img src="/seconds-logo.svg" alt="Seconds" />
+          </Link>
+          
+          {/* Desktop Navigation */}
+          <nav className="header-nav desktop-nav">
+            <Link href="/#about">About</Link>
+            <Link href="/#films">Films</Link>
+            <Link href="/collection">My Collection</Link>
+            <div className="header-connect">
+              <ConnectButton client={client} chain={chain} wallets={wallets} />
+            </div>
+          </nav>
+          
+          {/* Mobile Menu Button */}
+          <button 
+            className="mobile-menu-button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <CloseIcon /> : <HamburgerIcon />}
+          </button>
+        </div>
+        
+        {/* Mobile Navigation Menu */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.nav 
+              className="mobile-nav"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Link href="/#about" onClick={() => setMobileMenuOpen(false)}>About</Link>
+              <Link href="/#films" onClick={() => setMobileMenuOpen(false)}>Films</Link>
+              <Link href="/collection" onClick={() => setMobileMenuOpen(false)}>My Collection</Link>
+              <div className="mobile-connect">
+                <ConnectButton client={client} chain={chain} wallets={wallets} />
+              </div>
+            </motion.nav>
+          )}
+        </AnimatePresence>
+      </header>
+
       <style jsx global>{`
         :root {
           --bg: #0b0b0b;
@@ -94,6 +162,141 @@ export default function CollectionPage() {
           font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Header Styles */
+        .header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 100;
+          padding: 20px 40px;
+          background: rgba(11,11,11,0.8);
+          backdrop-filter: blur(10px);
+          border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .header-content {
+          max-width: 1400px;
+          margin: 0 auto;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        
+        .logo {
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          transition: opacity 0.2s ease;
+        }
+        
+        .logo:hover {
+          opacity: 0.8;
+        }
+        
+        .logo img {
+          height: 32px;
+          width: auto;
+        }
+        
+        .header-nav {
+          display: flex;
+          gap: 24px;
+          align-items: center;
+        }
+        
+        .header-nav a {
+          color: var(--muted);
+          text-decoration: none;
+          font-size: 14px;
+          font-weight: 500;
+          transition: color 0.2s ease;
+        }
+        
+        .header-nav a:hover {
+          color: var(--fg);
+        }
+        
+        .header-connect {
+          margin-left: 8px;
+        }
+        
+        /* Make Connect button more compact */
+        .header-connect button {
+          padding: 8px 16px !important;
+          font-size: 14px !important;
+          height: auto !important;
+          min-height: auto !important;
+          transition: background-color 0.2s ease, color 0.2s ease !important;
+        }
+        
+        .header-connect button:hover {
+          background-color: #d9ff5b !important;
+          color: #0b0b0b !important;
+        }
+        
+        .mobile-menu-button {
+          display: none;
+          background: none;
+          border: none;
+          color: var(--fg);
+          cursor: pointer;
+          padding: 8px;
+          margin: -8px;
+          transition: opacity 0.2s ease;
+        }
+        
+        .mobile-menu-button:hover {
+          opacity: 0.7;
+        }
+        
+        .mobile-nav {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          padding: 20px;
+          background: rgba(11,11,11,0.95);
+          backdrop-filter: blur(10px);
+          border-top: 1px solid rgba(255,255,255,0.1);
+          overflow: hidden;
+        }
+        
+        .mobile-nav a {
+          color: var(--muted);
+          text-decoration: none;
+          font-size: 16px;
+          font-weight: 500;
+          padding: 12px 0;
+          transition: color 0.2s ease;
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .mobile-nav a:hover {
+          color: var(--fg);
+        }
+        
+        .mobile-connect {
+          padding-top: 8px;
+        }
+        
+        @media (max-width: 768px) {
+          .desktop-nav {
+            display: none;
+          }
+          
+          .mobile-menu-button {
+            display: block;
+          }
+          
+          .header {
+            padding: 12px 16px;
+          }
+          
+          .logo img {
+            height: 24px;
+          }
         }
         
         .collection-container {
@@ -219,32 +422,19 @@ export default function CollectionPage() {
         
         .mint-link {
           display: inline-block;
-          padding: 14px 32px;
+          padding: 12px 32px;
           background: var(--accent);
           color: var(--bg);
-          border-radius: 12px;
+          border-radius: 10px;
           text-decoration: none;
           font-weight: 700;
+          font-size: 16px;
           transition: all 0.2s ease;
         }
         
         .mint-link:hover {
           transform: translateY(-2px);
           box-shadow: 0 10px 30px rgba(217, 255, 91, 0.3);
-        }
-        
-        .back-link {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          color: var(--accent);
-          text-decoration: none;
-          margin-bottom: 40px;
-          transition: opacity 0.2s ease;
-        }
-        
-        .back-link:hover {
-          opacity: 0.7;
         }
         
         .loading {
@@ -262,10 +452,6 @@ export default function CollectionPage() {
       `}</style>
 
       <div className="collection-container">
-        <Link href="/" className="back-link">
-          ← Back to Home
-        </Link>
-
         <div className="collection-header">
           <h1 className="collection-title">My Seconds Collection</h1>
           <p className="collection-subtitle">
@@ -349,8 +535,8 @@ export default function CollectionPage() {
           <div className="empty-state">
             <h3>No Seconds Yet</h3>
             <p>You don't own any Seconds NFTs yet. Mint your first second to get started!</p>
-            <Link href="/mint/when-night-is-almost-done" className="mint-link">
-              Mint Now
+            <Link href="/#films" className="mint-link">
+              Browse Films
             </Link>
           </div>
         )}
