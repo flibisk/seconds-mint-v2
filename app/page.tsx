@@ -101,14 +101,16 @@ export default function HomePage() {
         }
         
         .hero h1 {
+          font-family: var(--font-pineapple-bold), ui-sans-serif, system-ui;
           font-size: clamp(48px, 8vw, 120px);
-          font-weight: 800;
+          font-weight: 700;
           margin: 0 0 20px;
           letter-spacing: -0.02em;
           line-height: 1;
         }
         
         .hero h2 {
+          font-family: var(--font-pineapple-bold), ui-sans-serif, system-ui;
           font-size: clamp(24px, 4vw, 48px);
           font-weight: 700;
           margin: 0 0 40px;
@@ -167,8 +169,9 @@ export default function HomePage() {
         }
         
         .section-title {
+          font-family: var(--font-pineapple-bold), ui-sans-serif, system-ui;
           font-size: clamp(36px, 5vw, 64px);
-          font-weight: 800;
+          font-weight: 700;
           margin: 0 0 60px;
           text-align: center;
           letter-spacing: -0.02em;
@@ -196,7 +199,9 @@ export default function HomePage() {
         }
         
         .feature-card h3 {
+          font-family: var(--font-pineapple-bold), ui-sans-serif, system-ui;
           font-size: 24px;
+          font-weight: 700;
           margin: 0 0 16px;
           color: var(--accent);
         }
@@ -229,7 +234,9 @@ export default function HomePage() {
         }
         
         .pricing-card h3 {
+          font-family: var(--font-pineapple-bold), ui-sans-serif, system-ui;
           font-size: 28px;
+          font-weight: 700;
           margin: 0 0 10px;
         }
         
@@ -279,7 +286,9 @@ export default function HomePage() {
         }
         
         .film-card h3 {
+          font-family: var(--font-pineapple-bold), ui-sans-serif, system-ui;
           font-size: 24px;
+          font-weight: 700;
           margin: 0 0 10px;
         }
         

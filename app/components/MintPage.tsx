@@ -134,7 +134,8 @@ export default function MintPage() {
         }
         
         .title { 
-          font-weight: 800; 
+          font-family: var(--font-pineapple-bold), ui-sans-serif, system-ui;
+          font-weight: 700; 
           font-size: clamp(28px, 5vw, 48px); /* Better mobile scaling */
           margin: 0 0 6px; 
           letter-spacing: 0.02em; 

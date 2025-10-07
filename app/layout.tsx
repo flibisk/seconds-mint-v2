@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import Providers from "./providers";
+import { pineappleBold, pineappleRegular } from "./fonts";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -12,13 +13,13 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Seconds — Mint",
-  description: "Mint Seconds: When the Night is Almost Done",
+  title: "Seconds Film — Own a part of the next wave of cinema",
+  description: "Buy a second. Earn royalties. Mint Seconds NFTs from independent films and earn royalties when the film sells.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={poppins.variable}>
+    <html lang="en" className={`${poppins.variable} ${pineappleBold.variable} ${pineappleRegular.variable}`}>
       <body style={{ fontFamily: "var(--font-poppins), ui-sans-serif, system-ui" }}>
         <Providers>{children}</Providers>
       </body>
