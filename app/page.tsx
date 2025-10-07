@@ -34,7 +34,7 @@ const contract = getContract({
 });
 
 export default function Page() {
-  // Mobile responsive version
+  // Mobile responsive version - testing auto-deploy
   const account = useActiveAccount();
   const [qtyStr, setQtyStr] = useState<string>("1");
 
