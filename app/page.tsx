@@ -36,6 +36,158 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
   );
 }
 
+function FAQTabs() {
+  const [activeTab, setActiveTab] = useState<'film' | 'nft'>('nft');
+
+  return (
+    <div>
+      <div className="faq-tabs">
+        <button
+          className={`faq-tab ${activeTab === 'film' ? 'active' : ''}`}
+          onClick={() => setActiveTab('film')}
+        >
+          Film FAQ
+        </button>
+        <button
+          className={`faq-tab ${activeTab === 'nft' ? 'active' : ''}`}
+          onClick={() => setActiveTab('nft')}
+        >
+          NFT FAQ
+        </button>
+      </div>
+
+      <AnimatePresence mode="wait">
+        {activeTab === 'film' && (
+          <motion.div
+            key="film"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="faq-container"
+          >
+            <FAQItem
+              index={0}
+              question="Founders Background"
+              answer={
+                <div>
+                  <p>The founders of Seconds have been in the creative and movie making business for decades.</p>
+                  <p>Paul Mills is the owner of Screen Northants with several films already under his belt. Screen Northants are the production company that will provide the production model for The Money Shot's movies.</p>
+                  <p>Peter Snell has been working in the film and television industry for over 15 years and developing projects in web3 for clients and himself since 2018. He is the creative that will be merging the NFTs with the movie making process and ensuring value for all NFT holders.</p>
+                  <p>Our team are seasoned professionals that have worked on major motion pictures to TV and video games. They are also the ones passing down their experience and knowledge to our young, aspiring filmmakers.</p>
+                </div>
+              }
+            />
+
+            <FAQItem
+              index={1}
+              question="Surely you can't make a good film with that level of budget?"
+              answer={
+                <div>
+                  <p>We can and we do.</p>
+                  <p>We make films produced on a budget, but not a budget that means we can't make good films. This model not only allows us to give directors creative freedom but also allows us to reach a profit quickly - putting that profit to work on the next film.</p>
+                  <p>Think Blumhouse and you can't go far wrong. They started in 2008 with Paranormal Activity - which was shot and produced for $15,000 but grossed over $193 million worldwide.</p>
+                  <p>We won't be making films shot with a handy-cam, but you get the idea. Smaller budget equals bigger profit, allows bigger budget for the next movie (if needed to make it great).</p>
+                </div>
+              }
+            />
+
+            <FAQItem
+              index={2}
+              question="How can making movies do good?"
+              answer={
+                <div>
+                  <p>Seconds has partnered with Screen Northants for all its production - who in 2016 pitched an idea to BBC Children in Need.</p>
+                  <p>The idea that was pitched was that we could use the film making process to raise aspirations in young people, with a particular focus on those who are severely disadvantaged and/or underrepresented in our industry.</p>
+                  <p>BBC Children in Need provided the proof-of-concept funding and we have produced 3 feature films in our model and worked with 210 young people who fit the Children in Need (CIN) criteria. The results were fantastic, and BBC Children in Need were blown away by the achievements.</p>
+                </div>
+              }
+            />
+
+            <FAQItem
+              index={3}
+              question="How Screen Northants works"
+              answer={
+                <div>
+                  <p>Seconds works directly with Screen Northants on the production of its movies. Screen Northants itself is made up of 2 strands: Film and Academy, and they both feed into each other. They are of equal importance to the success of the project as whole.</p>
+                  <p>As a result of this partnership we can make high quality professional Films/Television, while creating a meritocracy within industry. Levelling the playing field by removing socio-economic, geographic and cultural barriers so that anyone with the right work ethic will have a shot at the big time.</p>
+                  <p>This seems like a simple statement but there are a couple of compelling reasons for wanting to do this.</p>
+                  <p>Firstly, because we engage disadvantaged and underrepresented young people on our projects, the expectation from industry was that the films themselves are simply educational tools or worse, student lead films. This is not the case, the best analogy we have for our model is that of a teaching hospital. Highly skilled professionals doing the work, while at the same time teaching juniors, allowing them to observe and even gain hands on experience whenever possible and without detracting from the quality of delivery.</p>
+                  <p>Secondly, we have found that best way to reach the more severely disenfranchised and disengaged young person is to treat them like an equal and engage them on projects with substance. To say "I trust you" to work on a film we have made up as an academic exercise for them is a waste of time. To say "I trust you" on a film that is everyone's livelihood and puts food on tables to feed our families, has a massive impact on how those young people engage.</p>
+                  <p>Thirdly, we want a BAFTA. We want to make films that are critical and or commercial successes as this not only validates the model but also helps subsidise it.</p>
+                </div>
+              }
+            />
+
+            <FAQItem
+              index={4}
+              question="What is The Academy?"
+              answer={
+                <div>
+                  <p>70 disadvantaged young people will get unprecedented training and work experience in Film and TV.</p>
+                  <p>The Academy is a 7 year programme which provides educational pathways and industry experience for 14-21 year olds.</p>
+                  <p>How it works is simple. We identify young people through engagement with schools directly or in connection with the Schools Film Competition. From 14-16 we provide work experience on 2 films (one per year). We then guide them to an appropriate Further Education course and from 16-18 they gain experience on 2 more films. By this point we hope they will have a clear idea of which department they want to work in and we then guide them to an appropriate Higher Education course. Throughout the HE course, they will gain additional experience on 3 more films, but now focused specifically on the department they want to work in. At 21 they leave University with a degree, 7 feature films on their CV and decent network of professionals to chase for work.</p>
+                </div>
+              }
+            />
+          </motion.div>
+        )}
+
+        {activeTab === 'nft' && (
+          <motion.div
+            key="nft"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="faq-container"
+          >
+            <FAQItem
+              index={0}
+              question="What is a Seconds NFT?"
+              answer="It is what it is. Every NFT represents a second from the film produced. If you own 60 of our Seconds NFTs you own a minute. Seconds NFTs are a creative way of raising money to produce films. Every project will be different and come with unique artwork, traits, attributes and utility."
+            />
+            
+            <FAQItem
+              index={1}
+              question="What is the benefit of owning the NFT?"
+              answer={
+                <div>
+                  <p>Imagine owning a part of Reservoir Dogs before it was released. Let's take it one step further. Imagine owning rights to a character in Star Wars before it was big...</p>
+                  <p>When you purchase a Second NFT, you gain ongoing royalty payments when the film generates revenue from streaming, box office, or distributions. Each NFT also comes with unique perks like behind-the-scenes access, premiere tickets, cast/crew events, and more.</p>
+                </div>
+              }
+            />
+            
+            <FAQItem
+              index={2}
+              question="Why NFT?"
+              answer={
+                <div>
+                  <p>We love the idea of web3 and how it combines the advanced, contemporary functionality of Web2 with the decentralised, community-governed ethos of Web1.</p>
+                  <p>Web3 is the internet owned by the builders and users built on a massive computer that is owned by no one. That's just cool.</p>
+                </div>
+              }
+            />
+            
+            <FAQItem
+              index={3}
+              question="How many Films will there be?"
+              answer="We don't plan on stopping anytime soon. We're building a sustainable model for independent cinema that can continue producing quality films for years to come."
+            />
+            
+            <FAQItem
+              index={4}
+              question="When will the project launch?"
+              answer="Now! We have our mint live now! Gone are the days of minting out in 1 minute. Any traditional funders we approach for our films will also be buying seconds."
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function HomePage() {
   return (
     <>
@@ -307,6 +459,36 @@ export default function HomePage() {
         .film-card .coming-soon {
           background: rgba(255,255,255,0.2);
           color: var(--fg);
+        }
+        
+        .faq-tabs {
+          display: flex;
+          gap: 16px;
+          justify-content: center;
+          margin-bottom: 40px;
+        }
+        
+        .faq-tab {
+          padding: 12px 32px;
+          background: rgba(255,255,255,0.05);
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 12px;
+          color: var(--muted);
+          font-weight: 600;
+          font-size: 16px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        
+        .faq-tab:hover {
+          background: rgba(255,255,255,0.08);
+          border-color: rgba(255,255,255,0.2);
+        }
+        
+        .faq-tab.active {
+          background: var(--accent);
+          color: var(--bg);
+          border-color: var(--accent);
         }
         
         .faq-container {
@@ -658,96 +840,7 @@ export default function HomePage() {
         transition={{ duration: 0.8 }}
       >
         <h2 className="section-title">Frequently Asked Questions</h2>
-        
-        <div className="faq-container">
-          <FAQItem
-            index={0}
-            question="What is a Seconds NFT?"
-            answer="It is what it is. Every NFT represents a second from the film produced. If you own 60 of our Seconds NFTs you own a minute. Seconds NFTs are a creative way of raising money to produce films. Every project will be different and come with unique artwork, traits, attributes and utility."
-          />
-          
-          <FAQItem
-            index={1}
-            question="What is the benefit of owning the NFT?"
-            answer={
-              <div>
-                <p>Imagine owning a part of Reservoir Dogs before it was released. Let's take it one step further. Imagine owning rights to a character in Star Wars before it was big...</p>
-                <p>When you purchase a Second NFT, you gain ongoing royalty payments when the film generates revenue from streaming, box office, or distributions. Each NFT also comes with unique perks like behind-the-scenes access, premiere tickets, cast/crew events, and more.</p>
-              </div>
-            }
-          />
-          
-          <FAQItem
-            index={2}
-            question="Surely you can't make a good film with that level of budget?"
-            answer={
-              <div>
-                <p>We can and we do.</p>
-                <p>We make films produced on a budget, but not a budget that means we can't make good films. This model not only allows us to give directors creative freedom but also allows us to reach a profit quickly - putting that profit to work on the next film.</p>
-                <p>Think Blumhouse and you can't go far wrong. They started in 2008 with Paranormal Activity - which was shot and produced for $15,000 but grossed over $193 million worldwide.</p>
-              </div>
-            }
-          />
-          
-          <FAQItem
-            index={3}
-            question="How can making movies do good?"
-            answer={
-              <div>
-                <p>Seconds has partnered with Screen Northants for all its production - who in 2016 pitched an idea to BBC Children in Need.</p>
-                <p>The idea was that we could use the film making process to raise aspirations in young people, with a particular focus on those who are severely disadvantaged and/or underrepresented in our industry.</p>
-                <p>BBC Children in Need provided the proof-of-concept funding and we have produced 3 feature films in our model and worked with 210 young people who fit the Children in Need criteria. The results were fantastic.</p>
-              </div>
-            }
-          />
-          
-          <FAQItem
-            index={4}
-            question="What is The Academy?"
-            answer={
-              <div>
-                <p>70 disadvantaged young people will get unprecedented training and work experience in Film and TV.</p>
-                <p>The Academy is a 7 year programme which provides educational pathways and industry experience for 14-21 year olds. We identify young people through engagement with schools. From 14-16 we provide work experience on 2 films. We then guide them to an appropriate Further Education course and from 16-18 they gain experience on 2 more films.</p>
-                <p>By this point we hope they will have a clear idea of which department they want to work in and we then guide them to an appropriate Higher Education course. Throughout the HE course, they will gain additional experience on 3 more films, but now focused specifically on the department they want to work in. At 21 they leave University with a degree, 7 feature films on their CV and decent network of professionals.</p>
-              </div>
-            }
-          />
-          
-          <FAQItem
-            index={5}
-            question="Why NFT?"
-            answer={
-              <div>
-                <p>We love the idea of web3 and how it combines the advanced, contemporary functionality of Web2 with the decentralised, community-governed ethos of Web1.</p>
-                <p>Web3 is the internet owned by the builders and users built on a massive computer that is owned by no one. That's just cool.</p>
-              </div>
-            }
-          />
-          
-          <FAQItem
-            index={6}
-            question="How many Films will there be?"
-            answer="We don't plan on stopping anytime soon. We're building a sustainable model for independent cinema that can continue producing quality films for years to come."
-          />
-          
-          <FAQItem
-            index={7}
-            question="When will the project launch?"
-            answer="Now! We have our mint live now! Gone are the days of minting out in 1 minute. Any traditional funders we approach for our films will also be buying seconds."
-          />
-          
-          <FAQItem
-            index={8}
-            question="Who are the founders?"
-            answer={
-              <div>
-                <p>The founders of Seconds have been in the creative and movie making business for decades.</p>
-                <p>Paul Mills is the owner of Screen Northants with several films already under his belt. Screen Northants are the production company that will provide the production model for The Money Shot's movies.</p>
-                <p>Peter Snell has been working in the film and television industry for over 15 years and developing projects in web3 for clients and himself since 2018. He is the creative that will be merging the NFTs with the movie making process and ensuring value for all NFT holders.</p>
-              </div>
-            }
-          />
-        </div>
+        <FAQTabs />
       </motion.section>
 
       {/* Footer */}
