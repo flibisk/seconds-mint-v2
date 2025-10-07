@@ -9,6 +9,25 @@ import { client } from "./thirdwebClient";
 import { ethereum, base, polygon, baseSepolia, polygonAmoy } from "thirdweb/chains";
 import NewsletterSignup from "./components/NewsletterSignup";
 
+function HamburgerIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  );
+}
+
 // resolve chain from env
 const CHAIN_NAME = (process.env.NEXT_PUBLIC_CHAIN || "").toLowerCase();
 const chain =
@@ -210,6 +229,8 @@ function FAQTabs() {
 }
 
 export default function HomePage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <>
       {/* Header */}
@@ -218,15 +239,46 @@ export default function HomePage() {
           <Link href="/" className="logo">
             <img src="/seconds-logo.svg" alt="Seconds" />
           </Link>
-        <nav className="header-nav">
-          <Link href="#about">About</Link>
-          <Link href="#films">Films</Link>
-          <Link href="/collection">My Collection</Link>
-          <div className="header-connect">
-            <ConnectButton client={client} chain={chain} wallets={wallets} />
-          </div>
-        </nav>
+          
+          {/* Desktop Navigation */}
+          <nav className="header-nav desktop-nav">
+            <Link href="#about">About</Link>
+            <Link href="#films">Films</Link>
+            <Link href="/collection">My Collection</Link>
+            <div className="header-connect">
+              <ConnectButton client={client} chain={chain} wallets={wallets} />
+            </div>
+          </nav>
+          
+          {/* Mobile Menu Button */}
+          <button 
+            className="mobile-menu-button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <CloseIcon /> : <HamburgerIcon />}
+          </button>
         </div>
+        
+        {/* Mobile Navigation Menu */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.nav 
+              className="mobile-nav"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Link href="#about" onClick={() => setMobileMenuOpen(false)}>About</Link>
+              <Link href="#films" onClick={() => setMobileMenuOpen(false)}>Films</Link>
+              <Link href="/collection" onClick={() => setMobileMenuOpen(false)}>My Collection</Link>
+              <div className="mobile-connect">
+                <ConnectButton client={client} chain={chain} wallets={wallets} />
+              </div>
+            </motion.nav>
+          )}
+        </AnimatePresence>
       </header>
 
       <style jsx global>{`
@@ -323,37 +375,65 @@ export default function HomePage() {
           margin-left: 8px;
         }
         
+        .mobile-menu-button {
+          display: none;
+          background: none;
+          border: none;
+          color: var(--fg);
+          cursor: pointer;
+          padding: 8px;
+          margin: -8px;
+          transition: opacity 0.2s ease;
+        }
+        
+        .mobile-menu-button:hover {
+          opacity: 0.7;
+        }
+        
+        .mobile-nav {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          padding: 20px;
+          background: rgba(11,11,11,0.95);
+          backdrop-filter: blur(10px);
+          border-top: 1px solid rgba(255,255,255,0.1);
+          overflow: hidden;
+        }
+        
+        .mobile-nav a {
+          color: var(--muted);
+          text-decoration: none;
+          font-size: 16px;
+          font-weight: 500;
+          padding: 12px 0;
+          transition: color 0.2s ease;
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .mobile-nav a:hover {
+          color: var(--fg);
+        }
+        
+        .mobile-connect {
+          padding-top: 8px;
+        }
+        
         @media (max-width: 768px) {
+          .desktop-nav {
+            display: none;
+          }
+          
+          .mobile-menu-button {
+            display: block;
+          }
+          
           .header {
             padding: 12px 16px;
           }
           
           .logo img {
             height: 24px;
-          }
-          
-          .header-nav {
-            gap: 12px;
-            flex-wrap: wrap;
-          }
-          
-          .header-nav a {
-            font-size: 12px;
-          }
-          
-          .header-connect {
-            margin-left: 0;
-          }
-        }
-        
-        @media (max-width: 600px) {
-          .header-nav {
-            gap: 8px;
-          }
-          
-          .header-nav a {
-            font-size: 11px;
-            white-space: nowrap;
           }
         }
         
