@@ -758,7 +758,7 @@ export default function HomePage() {
           fontSize: 'clamp(18px, 3vw, 24px)', 
           color: 'var(--muted)', 
           maxWidth: '800px', 
-          margin: '0 auto 60px',
+          margin: '0 auto 20px',
           lineHeight: 1.6
         }}>
           We are leveling the playing field and changing the way movies are made with Web3. 
@@ -769,6 +769,7 @@ export default function HomePage() {
       {/* Features Section */}
       <motion.section 
         className="section"
+        style={{ paddingTop: '40px' }}
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-100px" }}
