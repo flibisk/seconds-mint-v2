@@ -302,8 +302,14 @@ export default function CollectionPage() {
         .collection-container {
           max-width: 1400px;
           margin: 0 auto;
-          padding: 120px 20px 80px;
+          padding: 160px 20px 80px;
           min-height: 100vh;
+        }
+        
+        @media (max-width: 768px) {
+          .collection-container {
+            padding-top: 140px;
+          }
         }
         
         .collection-header {
