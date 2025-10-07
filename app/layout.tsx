@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   title: "Seconds: Own seconds, earn royalties",
   description: "Seconds allows you to buy a second of a film and get paid royalties based on the films profits.",
   metadataBase: new URL('https://secondsfilm.com'),
+  icons: {
+    icon: '/seconds-Favicon.png',
+    apple: '/Second-Webclip.png',
+  },
   openGraph: {
     title: "Seconds: Own seconds, earn royalties",
     description: "Seconds allows you to buy a second of a film and get paid royalties based on the films profits.",
