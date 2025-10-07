@@ -325,19 +325,35 @@ export default function HomePage() {
         
         @media (max-width: 768px) {
           .header {
-            padding: 16px 20px;
+            padding: 12px 16px;
           }
           
           .logo img {
-            height: 28px;
+            height: 24px;
           }
           
           .header-nav {
-            gap: 20px;
+            gap: 12px;
+            flex-wrap: wrap;
           }
           
           .header-nav a {
-            font-size: 13px;
+            font-size: 12px;
+          }
+          
+          .header-connect {
+            margin-left: 0;
+          }
+        }
+        
+        @media (max-width: 600px) {
+          .header-nav {
+            gap: 8px;
+          }
+          
+          .header-nav a {
+            font-size: 11px;
+            white-space: nowrap;
           }
         }
         
@@ -403,13 +419,13 @@ export default function HomePage() {
         }
         
         .btn-primary {
-          padding: 16px 40px;
+          padding: 12px 32px;
           background: var(--accent);
           color: var(--bg);
           border: none;
-          border-radius: 12px;
+          border-radius: 10px;
           font-weight: 700;
-          font-size: 18px;
+          font-size: 16px;
           cursor: pointer;
           transition: transform 0.2s ease, box-shadow 0.2s ease;
           text-decoration: none;
@@ -422,13 +438,13 @@ export default function HomePage() {
         }
         
         .btn-secondary {
-          padding: 16px 40px;
+          padding: 12px 32px;
           background: rgba(255,255,255,0.1);
           color: var(--fg);
           border: 1px solid rgba(255,255,255,0.2);
-          border-radius: 12px;
+          border-radius: 10px;
           font-weight: 700;
-          font-size: 18px;
+          font-size: 16px;
           cursor: pointer;
           transition: all 0.2s ease;
           text-decoration: none;
@@ -438,6 +454,14 @@ export default function HomePage() {
         .btn-secondary:hover {
           background: rgba(255,255,255,0.2);
           border-color: rgba(255,255,255,0.4);
+        }
+        
+        @media (max-width: 768px) {
+          .btn-primary,
+          .btn-secondary {
+            padding: 10px 24px;
+            font-size: 14px;
+          }
         }
         
         .section {
