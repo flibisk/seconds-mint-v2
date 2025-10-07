@@ -195,7 +195,7 @@ export default function HomePage() {
       <header className="header">
         <div className="header-content">
           <Link href="/" className="logo">
-            SECONDS
+            <img src="/seconds-logo.svg" alt="Seconds" />
           </Link>
           <nav className="header-nav">
             <Link href="#about">About</Link>
@@ -251,17 +251,19 @@ export default function HomePage() {
         }
         
         .logo {
-          font-family: var(--font-pineapple-regular), ui-sans-serif, system-ui;
-          font-size: 28px;
-          font-weight: 400;
-          color: var(--fg);
+          display: flex;
+          align-items: center;
           text-decoration: none;
-          letter-spacing: 0.05em;
-          transition: color 0.2s ease;
+          transition: opacity 0.2s ease;
         }
         
         .logo:hover {
-          color: var(--accent);
+          opacity: 0.8;
+        }
+        
+        .logo img {
+          height: 32px;
+          width: auto;
         }
         
         .header-nav {
@@ -287,8 +289,8 @@ export default function HomePage() {
             padding: 16px 20px;
           }
           
-          .logo {
-            font-size: 24px;
+          .logo img {
+            height: 28px;
           }
           
           .header-nav {
@@ -687,7 +689,7 @@ export default function HomePage() {
       <section className="hero">
         <div className="hero-bg">
           <img 
-            src="https://cdn.prod.website-files.com/601a7eb46cf274c860e24f00/64fd9c395a16efb4bee5abc7_The%20Money%20Shot%20Seconds%20Banner.jpg" 
+            src="/Background.avif" 
             alt="Seconds Film"
           />
           <div className="hero-scrim" />
