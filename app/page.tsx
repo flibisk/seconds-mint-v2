@@ -733,9 +733,9 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <Link href="/mint/when-night-is-almost-done" className="btn-primary">
+            <a href="#films" className="btn-primary">
               MINT NOW
-            </Link>
+            </a>
             <a href="#about" className="btn-secondary">
               Learn More
             </a>

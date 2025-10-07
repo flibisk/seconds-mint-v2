@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import Link from "next/link";
 import { getContract } from "thirdweb";
 import { ethereum, base, polygon, baseSepolia, polygonAmoy } from "thirdweb/chains";
 import { claimTo } from "thirdweb/extensions/erc721";
@@ -63,6 +64,79 @@ export default function MintPage() {
           width: 100%; 
           height: 100%; 
           overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        
+        /* Header for mint page */
+        .mint-header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 100;
+          padding: 20px 40px;
+          background: rgba(11,11,11,0.8);
+          backdrop-filter: blur(10px);
+          border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .mint-header-content {
+          max-width: 1400px;
+          margin: 0 auto;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        
+        .mint-logo {
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          transition: opacity 0.2s ease;
+        }
+        
+        .mint-logo:hover {
+          opacity: 0.8;
+        }
+        
+        .mint-logo img {
+          height: 32px;
+          width: auto;
+        }
+        
+        .mint-nav {
+          display: flex;
+          gap: 32px;
+          align-items: center;
+        }
+        
+        .mint-nav a {
+          color: var(--muted);
+          text-decoration: none;
+          font-size: 14px;
+          font-weight: 500;
+          transition: color 0.2s ease;
+        }
+        
+        .mint-nav a:hover {
+          color: var(--fg);
+        }
+        
+        @media (max-width: 768px) {
+          .mint-header {
+            padding: 16px 20px;
+          }
+          
+          .mint-logo img {
+            height: 28px;
+          }
+          
+          .mint-nav {
+            gap: 20px;
+          }
+          
+          .mint-nav a {
+            font-size: 13px;
+          }
         }
         
         /* Mobile-first responsive container */
@@ -241,6 +315,19 @@ export default function MintPage() {
           box-sizing: border-box;
         }
       `}</style>
+
+      {/* Header */}
+      <header className="mint-header">
+        <div className="mint-header-content">
+          <Link href="/" className="mint-logo">
+            <img src="/seconds-logo.svg" alt="Seconds" />
+          </Link>
+          <nav className="mint-nav">
+            <Link href="/#films">All Films</Link>
+            <Link href="/terms">Terms</Link>
+          </nav>
+        </div>
+      </header>
   
       <div className="screen">
         {/* Background media (video preferred; image as fallback) */}
