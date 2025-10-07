@@ -15,7 +15,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Seconds: Own seconds, earn royalties",
   description: "Seconds allows you to buy a second of a film and get paid royalties based on the films profits.",
-  metadataBase: new URL('https://secondsfilm.com'),
+  metadataBase: new URL('https://mint.secondsfilm.com'),
   icons: {
     icon: '/seconds-Favicon.png',
     apple: '/Second-Webclip.png',
@@ -23,22 +23,26 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Seconds: Own seconds, earn royalties",
     description: "Seconds allows you to buy a second of a film and get paid royalties based on the films profits.",
+    url: 'https://mint.secondsfilm.com',
     images: [
       {
-        url: '/Meta-image.avif',
+        url: 'https://mint.secondsfilm.com/Meta-image.avif',
         width: 1200,
         height: 630,
         alt: 'Seconds - Own seconds, earn royalties',
+        type: 'image/avif',
       }
     ],
     type: 'website',
     siteName: 'Seconds',
+    locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
     title: "Seconds: Own seconds, earn royalties",
     description: "Seconds allows you to buy a second of a film and get paid royalties based on the films profits.",
-    images: ['/Meta-image.avif'],
+    images: ['https://mint.secondsfilm.com/Meta-image.avif'],
+    creator: '@secondsfilm',
   },
 };
 
