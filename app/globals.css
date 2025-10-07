@@ -7,6 +7,30 @@
   --seconds-accent: #D9FF5B;      /* tweak to your exact accent later */
 }
 
+/* Prevent flash of unstyled content */
+html {
+  visibility: visible;
+  opacity: 1;
+}
+
+html:not(.fonts-loaded) {
+  visibility: visible;
+}
+
+/* Smooth fade in after fonts load */
+body {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Full-bleed dark gradient background */
 html, body {
   background:
