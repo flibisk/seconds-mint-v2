@@ -199,7 +199,7 @@ export default function HomePage() {
           </Link>
           <nav className="header-nav">
             <Link href="#about">About</Link>
-            <Link href="/mint/when-night-is-almost-done">Mint</Link>
+            <Link href="#films">Mint</Link>
             <Link href="/terms">Terms</Link>
           </nav>
         </div>
@@ -883,6 +883,7 @@ export default function HomePage() {
 
       {/* Films Section */}
       <motion.section 
+        id="films"
         className="section"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
