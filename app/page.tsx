@@ -381,6 +381,12 @@ export default function HomePage() {
           font-size: 14px !important;
           height: auto !important;
           min-height: auto !important;
+          transition: background-color 0.2s ease, color 0.2s ease !important;
+        }
+        
+        .header-connect button:hover {
+          background-color: #d9ff5b !important;
+          color: #0b0b0b !important;
         }
         
         .mobile-menu-button {
