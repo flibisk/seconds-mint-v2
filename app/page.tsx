@@ -220,7 +220,7 @@ export default function HomePage() {
           </Link>
         <nav className="header-nav">
           <Link href="#about">About</Link>
-          <Link href="#films">Mint</Link>
+          <Link href="#films">Films</Link>
           <Link href="/collection">My Collection</Link>
           <div className="header-connect">
             <ConnectButton client={client} chain={chain} wallets={wallets} />
