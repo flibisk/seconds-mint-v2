@@ -218,15 +218,14 @@ export default function HomePage() {
           <Link href="/" className="logo">
             <img src="/seconds-logo.svg" alt="Seconds" />
           </Link>
-          <nav className="header-nav">
-            <Link href="#about">About</Link>
-            <Link href="#films">Mint</Link>
-            <Link href="/collection">My Collection</Link>
-            <Link href="/terms">Terms</Link>
-            <div className="header-connect">
-              <ConnectButton client={client} chain={chain} wallets={wallets} />
-            </div>
-          </nav>
+        <nav className="header-nav">
+          <Link href="#about">About</Link>
+          <Link href="#films">Mint</Link>
+          <Link href="/collection">My Collection</Link>
+          <div className="header-connect">
+            <ConnectButton client={client} chain={chain} wallets={wallets} />
+          </div>
+        </nav>
         </div>
       </header>
 
