@@ -191,6 +191,20 @@ function FAQTabs() {
 export default function HomePage() {
   return (
     <>
+      {/* Header */}
+      <header className="header">
+        <div className="header-content">
+          <Link href="/" className="logo">
+            SECONDS
+          </Link>
+          <nav className="header-nav">
+            <Link href="#about">About</Link>
+            <Link href="/mint/when-night-is-almost-done">Mint</Link>
+            <Link href="/terms">Terms</Link>
+          </nav>
+        </div>
+      </header>
+
       <style jsx global>{`
         :root {
           --bg: #0b0b0b;
@@ -214,6 +228,76 @@ export default function HomePage() {
           font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 100;
+          padding: 20px 40px;
+          background: rgba(11,11,11,0.8);
+          backdrop-filter: blur(10px);
+          border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .header-content {
+          max-width: 1400px;
+          margin: 0 auto;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        
+        .logo {
+          font-family: var(--font-pineapple-regular), ui-sans-serif, system-ui;
+          font-size: 28px;
+          font-weight: 400;
+          color: var(--fg);
+          text-decoration: none;
+          letter-spacing: 0.05em;
+          transition: color 0.2s ease;
+        }
+        
+        .logo:hover {
+          color: var(--accent);
+        }
+        
+        .header-nav {
+          display: flex;
+          gap: 32px;
+          align-items: center;
+        }
+        
+        .header-nav a {
+          color: var(--muted);
+          text-decoration: none;
+          font-size: 14px;
+          font-weight: 500;
+          transition: color 0.2s ease;
+        }
+        
+        .header-nav a:hover {
+          color: var(--fg);
+        }
+        
+        @media (max-width: 768px) {
+          .header {
+            padding: 16px 20px;
+          }
+          
+          .logo {
+            font-size: 24px;
+          }
+          
+          .header-nav {
+            gap: 20px;
+          }
+          
+          .header-nav a {
+            font-size: 13px;
+          }
         }
         
         .hero {
@@ -556,6 +640,21 @@ export default function HomePage() {
           margin-top: 100px;
         }
         
+        .footer-links {
+          margin: 0 0 20px;
+        }
+        
+        .footer-links a {
+          color: var(--accent);
+          text-decoration: none;
+          margin: 0 16px;
+          transition: opacity 0.2s ease;
+        }
+        
+        .footer-links a:hover {
+          opacity: 0.7;
+        }
+        
         .footer p {
           margin: 0;
           color: var(--muted);
@@ -845,6 +944,9 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="footer">
+        <div className="footer-links">
+          <Link href="/terms">Terms and Conditions</Link>
+        </div>
         <p>© 2025 Seconds | Building the future of independent cinema</p>
       </footer>
     </>
