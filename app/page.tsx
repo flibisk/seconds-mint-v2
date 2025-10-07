@@ -3,7 +3,27 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { ConnectButton } from "thirdweb/react";
+import { createWallet } from "thirdweb/wallets";
+import { client } from "./thirdwebClient";
+import { ethereum, base, polygon, baseSepolia, polygonAmoy } from "thirdweb/chains";
 import NewsletterSignup from "./components/NewsletterSignup";
+
+// resolve chain from env
+const CHAIN_NAME = (process.env.NEXT_PUBLIC_CHAIN || "").toLowerCase();
+const chain =
+  CHAIN_NAME === "ethereum" ? ethereum :
+  CHAIN_NAME === "base" ? base :
+  CHAIN_NAME === "polygon" ? polygon :
+  CHAIN_NAME === "base-sepolia" ? baseSepolia :
+  CHAIN_NAME === "polygon-amoy" ? polygonAmoy :
+  ethereum;
+
+const wallets = [
+  createWallet("io.metamask"),
+  createWallet("com.coinbase.wallet"),
+  createWallet("me.rainbow"),
+];
 
 function FAQItem({ question, answer, index }: { question: string; answer: string | React.ReactNode; index: number }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -201,7 +221,11 @@ export default function HomePage() {
           <nav className="header-nav">
             <Link href="#about">About</Link>
             <Link href="#films">Mint</Link>
+            <Link href="/collection">My Collection</Link>
             <Link href="/terms">Terms</Link>
+            <div className="header-connect">
+              <ConnectButton client={client} chain={chain} wallets={wallets} />
+            </div>
           </nav>
         </div>
       </header>
@@ -280,7 +304,7 @@ export default function HomePage() {
         
         .header-nav {
           display: flex;
-          gap: 32px;
+          gap: 24px;
           align-items: center;
         }
         
@@ -294,6 +318,10 @@ export default function HomePage() {
         
         .header-nav a:hover {
           color: var(--fg);
+        }
+        
+        .header-connect {
+          margin-left: 8px;
         }
         
         @media (max-width: 768px) {
