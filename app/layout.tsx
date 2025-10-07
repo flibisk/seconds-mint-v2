@@ -26,11 +26,11 @@ export const metadata: Metadata = {
     url: 'https://mint.secondsfilm.com',
     images: [
       {
-        url: 'https://mint.secondsfilm.com/Meta-image.avif',
+        url: 'https://mint.secondsfilm.com/Meta-image.png',
         width: 1200,
         height: 630,
         alt: 'Seconds - Own seconds, earn royalties',
-        type: 'image/avif',
+        type: 'image/png',
       }
     ],
     type: 'website',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: "Seconds: Own seconds, earn royalties",
     description: "Seconds allows you to buy a second of a film and get paid royalties based on the films profits.",
-    images: ['https://mint.secondsfilm.com/Meta-image.avif'],
+    images: ['https://mint.secondsfilm.com/Meta-image.png'],
     creator: '@secondsfilm',
   },
 };
